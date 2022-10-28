@@ -101,6 +101,31 @@ export class Player extends AcGameObject {
         } else if (this.x + this.width > this.root.game_map.$canvas.width()) {
             this.x = this.root.game_map.$canvas.width() - this.width;
         }
+
+        // 加入推人效果 2022/10/28
+        let [a, b] = this.root.players;
+
+        if (a != this) [a, b] = [b, a];
+
+        let r1 = {
+            x1: a.x,
+            y1: a.y,
+            x2: a.x + a.width,
+            y2: a.y + a.height,
+        };
+        let r2 = {
+            x1: b.x,
+            y1: b.y,
+            x2: b.x + b.width,
+            y2: b.y + b.height,
+        };
+
+        if (this.is_collision(r1, r2)) {    // 另其同时进行移动
+            b.x += this.vx * this.timedelta / 1000 / 2;
+            b.y += this.vy * this.timedelta / 1000 / 2;
+            a.x += this.vx * this.timedelta / 1000 / 2;
+            a.y += this.vy * this.timedelta / 1000 / 2;
+        }
     }
 
     // 修改对称
